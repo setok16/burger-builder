@@ -5,38 +5,41 @@ import classes from './BurgerIngredient.css';
 
 class BurgerIngredient extends Component {
   render() {
+    const { type } = this.props;
     let ingredient = null;
 
-    switch (this.props.type) {
-      case('bread-bottom'):
-        ingredient = <div className={classes.BreadBottom}></div>
+    switch (type) {
+      case ('bread-bottom'):
+        ingredient = (
+          <div className={classes.BreadBottom} />
+        );
         break;
-      case('bread-top'):
+      case ('bread-top'):
         ingredient = (
           <div className={classes.BreadTop}>
-            <div className={classes.Seeds1}></div>
-            <div className={classes.Seeds2}></div>
+            <div className={classes.Seeds1} />
+            <div className={classes.Seeds2} />
           </div>
         );
         break;
-      case('meat'):
+      case ('meat'):
         ingredient = (
-          <div className={classes.Meat}></div>
+          <div className={classes.Meat} />
         );
         break;
-      case('cheese'):
+      case ('cheese'):
         ingredient = (
-          <div className={classes.Cheese}></div>
+          <div className={classes.Cheese} />
         );
         break;
-      case('salad'):
+      case ('salad'):
         ingredient = (
-          <div className={classes.Salad}></div>
+          <div className={classes.Salad} />
         );
         break;
-      case('bacon'):
+      case ('bacon'):
         ingredient = (
-          <div className={classes.Bacon}></div>
+          <div className={classes.Bacon} />
         );
         break;
       default:
@@ -48,6 +51,6 @@ class BurgerIngredient extends Component {
 
 BurgerIngredient.propTypes = {
   type: PropTypes.string.isRequired,
-}
+};
 
 export default BurgerIngredient;

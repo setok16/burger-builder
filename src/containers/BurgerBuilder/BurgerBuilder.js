@@ -26,22 +26,12 @@ class BurgerBuilder extends Component {
     purchasing: false,
   };
 
-  updatePurchaseState (ingredients) {
-    const sum = Object.keys(ingredients)
-                  .map(igKey => {
-                    return ingredients[igKey];
-                  })
-                  .reduce((sum, el) => {
-                    return sum + el;
-                  },0);
-    this.setState({ purchasable: sum > 0 });
-  }
-
   addIngredientHandler = (type) => {
-    const updatedCount = this.state.ingredients[type] + 1;
-    const updatedIngredients = { ...this.state.ingredients };
+    const { ingredients, totalPrice } = this.state;
+    const updatedCount = ingredients[type] + 1;
+    const updatedIngredients = { ...ingredients };
     updatedIngredients[type] = updatedCount;
-    const newPrice = this.state.totalPrice + INGREDIENT_PRICES[type];
+    const newPrice = totalPrice + INGREDIENT_PRICES[type];
     this.setState({
       ingredients: updatedIngredients,
       totalPrice: newPrice,
@@ -50,11 +40,12 @@ class BurgerBuilder extends Component {
   }
 
   removeIngredientHandler = (type) => {
-    if (this.state.ingredients[type] > 0) {
-      const updatedCount = this.state.ingredients[type] - 1;
-      const updatedIngredients = { ...this.state.ingredients };
+    const { ingredients, totalPrice } = this.state;
+    if (ingredients[type] > 0) {
+      const updatedCount = ingredients[type] - 1;
+      const updatedIngredients = { ...ingredients };
       updatedIngredients[type] = updatedCount;
-      const newPrice = this.state.totalPrice - INGREDIENT_PRICES[type];
+      const newPrice = totalPrice - INGREDIENT_PRICES[type];
       this.setState({
         ingredients: updatedIngredients,
         totalPrice: newPrice,
@@ -75,28 +66,47 @@ class BurgerBuilder extends Component {
     alert('You continue!');
   }
 
+  updatePurchaseState(ingredients) {
+    const sum = Object.keys(ingredients)
+      .map((igKey) => {
+        return ingredients[igKey];
+      })
+      .reduce((total, el) => {
+        return total + el;
+      }, 0);
+    this.setState({ purchasable: sum > 0 });
+  }
+
   render() {
-    const disabledInfo = { ...this.state.ingredients };
-    for (let key in disabledInfo) {
+    const {
+      ingredients,
+      purchasing,
+      totalPrice,
+      purchasable,
+    } = this.state;
+    const disabledInfo = { ...ingredients };
+    for (const key in disabledInfo) {
       disabledInfo[key] = disabledInfo[key] <= 0;
     }
-    return(
+    return (
       <Aux>
-        <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
+        <Modal show={purchasing} modalClosed={this.purchaseCancelHandler}>
           <OrderSummary
-            ingredients={this.state.ingredients}
+            ingredients={ingredients}
             purchaseCancelled={this.purchaseCancelHandler}
             purchaseContinued={this.purchaseContinueHandler}
-            price={this.state.totalPrice} />
+            price={totalPrice}
+          />
         </Modal>
-        <Burger ingredients={this.state.ingredients} />
+        <Burger ingredients={ingredients} />
         <BuildControls
-          price={this.state.totalPrice}
+          price={totalPrice}
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
-          purchasable={this.state.purchasable}
+          purchasable={purchasable}
           disabled={disabledInfo}
-          ordered={this.purchaseHandler} />
+          ordered={this.purchaseHandler}
+        />
       </Aux>
     );
   }

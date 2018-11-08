@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Aux from '../../hoc/Aux';
 import classes from './Layout.css';
@@ -6,8 +7,11 @@ import Toolbar from '../Navigation/Toolbar/Toolbar';
 import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 
 class Layout extends Component {
-  state = {
-    showSideDrawer: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      showSideDrawer: false,
+    };
   }
 
   sideDrawerToggleHandler = () => {
@@ -20,17 +24,23 @@ class Layout extends Component {
     this.setState({ showSideDrawer: false });
   }
 
-  render () {
+  render() {
+    const { showSideDrawer } = this.state;
+    const { children } = this.props;
     return (
       <Aux>
-        <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler}/>
-        <SideDrawer open={this.state.showSideDrawer} closed={this.sideDrawerClosedHandler}/>
+        <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler} />
+        <SideDrawer open={showSideDrawer} closed={this.sideDrawerClosedHandler} />
         <main className={classes.Content}>
-          {this.props.children}
+          {children}
         </main>
       </Aux>
     );
   }
 }
+
+Layout.propTypes = {
+  children: PropTypes.object.isRequired,
+};
 
 export default Layout;

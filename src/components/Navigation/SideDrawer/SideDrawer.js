@@ -1,19 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Logo from '../../Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems';
-import classes from './SideDrawer.css'
+import classes from './SideDrawer.css';
 import Backdrop from '../../UI/Backdrop/Backdrop';
 import Aux from '../../../hoc/Aux';
 
 const sideDrawer = (props) => {
+  const { open, closed } = props;
   let attachedClasses = [classes.SideDrawer, classes.Close];
-  if (props.open) {
+  if (open) {
     attachedClasses = [classes.SideDrawer, classes.Open];
   }
   return (
     <Aux>
-      <Backdrop show={props.open} clicked={props.closed} />
+      <Backdrop show={open} clicked={closed} />
       <div className={attachedClasses.join(' ')}>
         <div style={{ height: '11%', marginBottom: '32px' }}>
           <Logo />
@@ -24,6 +26,11 @@ const sideDrawer = (props) => {
       </div>
     </Aux>
   );
+};
+
+sideDrawer.propTypes = {
+  open: PropTypes.func.isRequired,
+  closed: PropTypes.func.isRequired,
 };
 
 export default sideDrawer;
